@@ -1,11 +1,10 @@
-import React from "react";
+import React, { StrictMode } from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import "./index.css";
-import { UsuarioProvider, useUsuario } from "./context/usuarioContext";
 ReactDOM.render(
-  <UsuarioProvider>
+  <StrictMode>
     <App />
-  </UsuarioProvider>,
+  </StrictMode>,
   document.getElementById("root")
 );

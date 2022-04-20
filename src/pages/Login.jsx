@@ -38,7 +38,7 @@ export default function Login({ handleSubmit, changeRemember }) {
         >
           <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
           <div className="w-full px-24 z-10 text-center">
-            <img src={logo} />
+            <img src={logo} alt="#" />
             <h1 className="text-5xl font-bold tracking-wide">iniciar sesión</h1>
           </div>
         </div>

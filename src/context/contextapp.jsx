@@ -1,14 +1,15 @@
-import Header from "./components/Header";
-import { useEffect } from "react";
-import { useState } from "react";
-import Login from "./pages/Login";
+import React, {
+  useContext,
+  useMemo,
+  createContext,
+  useState,
+  useEffect,
+} from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import Sidebar from "./components/Sidebar";
-import MyRoutes from "./components/routes/routes";
-import { Contextapp } from "./context/contextapp";
-import { ToastContainer } from "react-toastify";
-export default function App() {
+const AppContext = createContext();
+
+export function Contextapp({ children }) {
   const [user, setUser] = useState(null);
   const [Remember, setRemember] = useState(false);
   const changeRemember = (e) => {
@@ -74,40 +75,55 @@ export default function App() {
       console.log(err);
     }
   };
-  const Plantilla = async (e) => {
+  const getCombobox = async (e) => {
     try {
-      const res = await axios.get("/api/products", {
-        pais: e.pais,
-        sku: e.sku,
+      let res = { f: "asw" };
+      await axios.get("http://localhost:5000/api/combobox").then((response) => {
+        res = response.data;
       });
-      return res.data;
+      return res;
     } catch (err) {
       console.error(err);
     }
   };
-  return (
-    <Contextapp>
-      <>
-        <ToastContainer />
-        {user ? (
-          <>
-            <div className=" max-h-screen">
-              <Header logout={logout} />
-              <div className="relative flex min-h-screen">
-                <Sidebar />
-                <div
-                  style={{ maxWidth: "90%", maxHeight: "100%" }}
-                  className="bg-white pt-20 "
-                >
-                  <MyRoutes Plantilla={Plantilla} />
-                </div>
-              </div>
-            </div>
-          </>
-        ) : (
-          <Login handleSubmit={handleSubmit} changeRemember={changeRemember} />
-        )}
-      </>
-    </Contextapp>
-  );
+  const LifemilesRequest = async (e) => {
+    try {
+      if (typeof e.pais === "string") {
+        let res;
+        await axios
+          .post("http://172.19.0.60:5000/api/plantilla", {
+            pais: e.pais,
+            sku: e.sku,
+            tipo: e.tipo,
+          })
+          .then((response) => {
+            res = response.data;
+          });
+        return res;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const [Slide, setSlide] = useState(true);
+  const toogleSlide = () => {
+    setSlide(!Slide);
+  };
+  const value = useMemo(() => {
+    return {
+      logout,
+      LifemilesRequest,
+      Slide,
+      toogleSlide,
+      getCombobox,
+      changeRemember,
+      handleSubmit,
+    };
+  }, [Slide]);
+
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+}
+
+export function useAppContext() {
+  return useContext(AppContext);
 }
