@@ -144,18 +144,22 @@ export default function Plantillas() {
   ]);
   const { LifemilesRequest /*, getCombobox*/ } = useAppContext();
 
-  const [formValue, setFormValue] = useState({
-    pais: "CO",
-    sku: ["LE024EL64AMXLACOL", "LE024EL63AMYLACOL", "LE024EL62AMZLACOL"],
-    tipo: "",
-  });
+  const [formValue, setFormValue] = useState([
+    "LE024EL64AMXLACOL",
+    "LE024EL63AMYLACOL",
+    "LE024EL62AMZLACOL",
+  ]);
 
   async function handleSub(e) {
     e.preventDefault();
-    var aux = formValue;
+    var aux = {
+      pais: Country,
+      sku: formValue,
+      tipo: Tipo,
+    };
     try {
       setLoader(true);
-      const res = await LifemilesRequest(formValue);
+      const res = await LifemilesRequest(aux);
       console.log(res);
       if (res === undefined || res === null) {
         throw Error;
@@ -190,11 +194,7 @@ export default function Plantillas() {
     var aux = e.target.value;
     aux = aux.split("\n");
 
-    setFormValue({
-      pais: Country,
-      sku: aux,
-      tipo: Tipo,
-    });
+    setFormValue(aux);
   };
   return (
     <>
@@ -338,7 +338,7 @@ export default function Plantillas() {
                             </a>
                           )}
                         </Menu.Item>
-                        {products && (
+                        {products && !(products.length === 0) && (
                           <Menu.Item>
                             {({ active }) => (
                               <span
@@ -379,7 +379,7 @@ export default function Plantillas() {
           style={{ maxHeight: "88vh" }}
           className="mt-2 w-full overflow-auto"
         >
-          <div className="w-full h-full bg-white">
+          <div className="w-full bg-white">
             {products && !Loader ? (
               <table className=" divide-y divide-gray-300">
                 <thead className="bg-gray-50">
@@ -418,8 +418,8 @@ export default function Plantillas() {
               </table>
             ) : (
               <div
-                style={{ width: "70vw" }}
-                className=" justify-center h-full align-middle flex bg-opacity-30 min-h-full"
+                style={{ width: "70vw", height: "50vw" }}
+                className=" justify-center h-full  align-middle flex bg-opacity-30 "
               >
                 <div className=" mx-auto my-auto">
                   {!Loader ? (
