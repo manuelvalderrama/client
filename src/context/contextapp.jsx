@@ -6,11 +6,13 @@ import React, {
   useEffect,
 } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 const AppContext = createContext();
 
 export function Contextapp({ children }) {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
   const [Remember, setRemember] = useState(false);
   const changeRemember = (e) => {
     setRemember(e);
@@ -31,6 +33,7 @@ export function Contextapp({ children }) {
   const logout = () => {
     localStorage.clear();
     setUser(null);
+    navigate("/login");
   };
   /*
   const refreshToken = async () => {
@@ -65,7 +68,7 @@ export function Contextapp({ children }) {
   const handleSubmit = async (e) => {
     try {
       if (typeof e.username === "string") {
-        const res = await axios.post("/login", {
+        const res = await axios.post("http://localhost:5000/api/login", {
           username: e.username,
           password: e.password,
         });
@@ -114,6 +117,7 @@ export function Contextapp({ children }) {
       logout,
       LifemilesRequest,
       Slide,
+      user,
       toogleSlide,
       getCombobox,
       changeRemember,

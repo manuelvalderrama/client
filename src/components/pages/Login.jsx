@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import logo from "../img/linio_dark.png";
-import fondo from "../img/linio_back.png";
+import logo from "../../img/linio_dark.png";
+import fondo from "../../img/linio_back.png";
+import { useNavigate } from "react-router-dom";
 export default function Login({ handleSubmit, changeRemember }) {
   const [formValue, setFormValue] = useState({
     username: "",
     password: "",
   });
-
+  const navigate = useNavigate();
   const handleChange = (event) => {
     setFormValue({
       ...formValue,
@@ -17,6 +18,7 @@ export default function Login({ handleSubmit, changeRemember }) {
     e.preventDefault();
     try {
       await handleSubmit(formValue);
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
