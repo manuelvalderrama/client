@@ -14,6 +14,8 @@ export function Contextapp({ children }) {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const [Remember, setRemember] = useState(false);
+
+  const [Progres, setProgres] = useState(0);
   const changeRemember = (e) => {
     setRemember(e);
   };
@@ -23,6 +25,9 @@ export function Contextapp({ children }) {
       setUser(JSON.parse(data));
     }
   }, []);
+  useEffect(() => {
+    console.log(Progres);
+  }, [Progres]);
 
   useEffect(() => {
     if (Remember) {
@@ -80,30 +85,19 @@ export function Contextapp({ children }) {
     }
   };
 
-  const getCombobox = async (e) => {
-    try {
-      let res = { f: "asw" };
-      await axios.get("http://localhost:5000/api/combobox").then((response) => {
-        res = response.data;
-      });
-      return res;
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const LifemilesRequest = async (e) => {
     try {
       if (typeof e.pais === "string") {
         var y = [];
         var x = e.sku;
-        const chunkSize = 500;
+        const chunkSize = 200;
         for (let i = 0; i < x.length; i += chunkSize) {
           const chunk = x.slice(i, i + chunkSize);
           y.push(chunk);
         }
         let res = [];
         for (let i = 0; i < y.length; i++) {
+          setProgres((i * 100) / y.length);
           await axios
             .post("http://172.19.0.60:5000/api/plantilla", {
               pais: e.pais,
@@ -114,7 +108,7 @@ export function Contextapp({ children }) {
               res.push(response.data);
             });
         }
-
+        setProgres(0);
         return [].concat(...res);
       }
     } catch (err) {
@@ -132,11 +126,11 @@ export function Contextapp({ children }) {
       Slide,
       user,
       toogleSlide,
-      getCombobox,
       changeRemember,
       handleSubmit,
+      Progres,
     };
-  }, [Slide]);
+  }, [Slide, Progres]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

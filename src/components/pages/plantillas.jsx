@@ -12,10 +12,10 @@ const Excelsheet = ExportExcel.ExcelFile;
 const Excelcolumn = ExportExcel.ExcelFile;
 export default function Plantillas() {
   const [products, setProducts] = useState();
-  const [visible, setVisible] = useState();
   const [Country, setCountry] = useState();
   const [Tipo, setTipo] = useState();
   const [Loader, setLoader] = useState(false);
+  const [Form, setForm] = useState("");
   const [Combobox, setCombobox] = useState([
     {
       ID: 1,
@@ -166,7 +166,6 @@ export default function Plantillas() {
         throw Error;
       }
       setProducts(res);
-      setVisible(res.slice(0, 100));
       setLoader(false);
       toast.success("Solicitud Completada!", {
         position: "top-right",
@@ -194,6 +193,7 @@ export default function Plantillas() {
   const handlechange = (e) => {
     e.preventDefault();
     var aux = e.target.value;
+    setForm(aux);
     aux = aux.split("\n");
 
     setFormValue(aux);
@@ -277,11 +277,24 @@ export default function Plantillas() {
           </div>
           <div className="col-span-1">
             <div className="mt-2">
-              <label className=" text-sm font-medium text-gray-700">SKUs</label>
+              <div className="flex">
+                <label className=" text-sm font-medium text-gray-700">
+                  SKUs
+                </label>
+                <button
+                  onClick={() => {
+                    setForm("");
+                  }}
+                  className="font-bold rounded-t-lg bg-gray-300 flex justify-between p-1 ml-auto text-sm leading-5 text-left"
+                >
+                  Vaciar
+                </button>
+              </div>
               <textarea
                 name="skus"
                 id="skus"
                 onChange={handlechange}
+                value={Form}
                 className="py-3 px-2 h-40 w-full text-xs font-semibold shadow-sm border-gray-500 border-2 rounded-md"
               />
             </div>
