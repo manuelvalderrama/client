@@ -65,6 +65,7 @@ export function Contextapp({ children }) {
       return Promise.reject(error);
     }
   );
+
   const handleSubmit = async (e) => {
     try {
       if (typeof e.username === "string") {
@@ -78,6 +79,7 @@ export function Contextapp({ children }) {
       console.log(err);
     }
   };
+
   const getCombobox = async (e) => {
     try {
       let res = { f: "asw" };
@@ -89,20 +91,31 @@ export function Contextapp({ children }) {
       console.error(err);
     }
   };
+
   const LifemilesRequest = async (e) => {
     try {
       if (typeof e.pais === "string") {
-        let res;
-        await axios
-          .post("http://172.19.0.60:5000/api/plantilla", {
-            pais: e.pais,
-            sku: e.sku,
-            tipo: e.tipo,
-          })
-          .then((response) => {
-            res = response.data;
-          });
-        return res;
+        var y = [];
+        var x = e.sku;
+        const chunkSize = 500;
+        for (let i = 0; i < x.length; i += chunkSize) {
+          const chunk = x.slice(i, i + chunkSize);
+          y.push(chunk);
+        }
+        let res = [];
+        for (let i = 0; i < y.length; i++) {
+          await axios
+            .post("http://172.19.0.60:5000/api/plantilla", {
+              pais: e.pais,
+              sku: y[i],
+              tipo: e.tipo,
+            })
+            .then((response) => {
+              res.push(response.data);
+            });
+        }
+
+        return [].concat(...res);
       }
     } catch (err) {
       console.error(err);

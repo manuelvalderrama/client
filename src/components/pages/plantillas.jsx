@@ -12,6 +12,7 @@ const Excelsheet = ExportExcel.ExcelFile;
 const Excelcolumn = ExportExcel.ExcelFile;
 export default function Plantillas() {
   const [products, setProducts] = useState();
+  const [visible, setVisible] = useState();
   const [Country, setCountry] = useState();
   const [Tipo, setTipo] = useState();
   const [Loader, setLoader] = useState(false);
@@ -165,6 +166,7 @@ export default function Plantillas() {
         throw Error;
       }
       setProducts(res);
+      setVisible(res.slice(0, 100));
       setLoader(false);
       toast.success("Solicitud Completada!", {
         position: "top-right",
@@ -400,7 +402,7 @@ export default function Plantillas() {
                 </thead>
 
                 <tbody className=" overflow-scroll w-full">
-                  {products.map((person, personIdx) => (
+                  {products.slice(0, 500).map((person, personIdx) => (
                     <tr
                       key={person.name}
                       className={
