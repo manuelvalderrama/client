@@ -17,8 +17,8 @@ export default function MyRoutes({ Plantilla }) {
       {Progres > 0 && (
         <div className="relative top-0  bg-transparent z-30 h-1">
           <div
-            className="bg-white bg-opacity-50 h-1"
-            style={{ width: Progres + "%", transition: "width 0.25s" }}
+            className="bg-white h-1"
+            style={{ width: Progres + "%", transition: "width 0.4s" }}
           ></div>
         </div>
       )}

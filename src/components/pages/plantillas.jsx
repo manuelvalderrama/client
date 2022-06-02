@@ -143,6 +143,7 @@ export default function Plantillas() {
       Name: "Productos sin ventas (BOB)",
     },
   ]);
+  const [page, setpage] = useState(0);
   const { LifemilesRequest /*, getCombobox*/ } = useAppContext();
 
   const [formValue, setFormValue] = useState([
@@ -391,7 +392,7 @@ export default function Plantillas() {
           </div>
         </div>
         <div
-          style={{ maxHeight: "88vh" }}
+          style={{ maxHeight: "80vh" }}
           className="mt-2 w-full overflow-auto"
         >
           <div className="w-full bg-white">
@@ -400,7 +401,7 @@ export default function Plantillas() {
                 <thead className="bg-gray-50">
                   <tr>
                     {!(products.length === 0) ? (
-                      Object.keys(products[0]).map((obj) => (
+                      Object.keys(products[0][0]).map((obj) => (
                         <th
                           scope="col"
                           className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider"
@@ -415,7 +416,7 @@ export default function Plantillas() {
                 </thead>
 
                 <tbody className=" overflow-scroll w-full">
-                  {products.slice(0, 500).map((person, personIdx) => (
+                  {products[page].map((person, personIdx) => (
                     <tr
                       key={person.name}
                       className={
@@ -433,7 +434,7 @@ export default function Plantillas() {
               </table>
             ) : (
               <div
-                style={{ width: "70vw", height: "50vw" }}
+                style={{ width: "70vw", height: "30vw" }}
                 className=" justify-center h-full  align-middle flex bg-opacity-30 "
               >
                 <div className=" mx-auto my-auto">
@@ -452,6 +453,40 @@ export default function Plantillas() {
           </div>
         </div>
       </div>
+      {products && !Loader ? (
+        <div class="flex justify-end">
+          <div class="">
+            <select
+              onChange={(e) => setpage(e.target.value)}
+              class="form-select appearance-none
+      block
+      w-full
+      px-3
+      py-1.5
+      text-base
+      font-normal
+      text-gray-700
+      bg-white bg-clip-padding bg-no-repeat
+      border border-solid border-gray-300
+      rounded
+      transition
+      ease-in-out
+      m-0
+      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              aria-label="Default select example"
+            >
+              <option selected>Selecciona la Pagina!</option>
+              {products.map((obj, objidx) => (
+                <option value={objidx}>
+                  Pagina: {objidx + 1}/Cols: {obj.length}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </>
   );
 }

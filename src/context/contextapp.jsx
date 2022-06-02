@@ -90,7 +90,7 @@ export function Contextapp({ children }) {
       if (typeof e.pais === "string") {
         var y = [];
         var x = e.sku;
-        const chunkSize = 200;
+        const chunkSize = 100;
         for (let i = 0; i < x.length; i += chunkSize) {
           const chunk = x.slice(i, i + chunkSize);
           y.push(chunk);
@@ -109,7 +109,7 @@ export function Contextapp({ children }) {
             });
         }
         setProgres(0);
-        return [].concat(...res);
+        return res;
       }
     } catch (err) {
       console.error(err);
