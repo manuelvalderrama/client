@@ -3,18 +3,22 @@ import logo from "../../img/linio_dark.png";
 import fondo from "../../img/linio_back.png";
 import { useNavigate } from "react-router-dom";
 export default function Login({ handleSubmit, changeRemember }) {
+  //variables para el formulario de envio
   const [formValue, setFormValue] = useState({
     username: "",
     password: "",
   });
-  const navigate = useNavigate();
+  const navigate = useNavigate(); //objeto usado para cambiar ruta
+
   const handleChange = (event) => {
+    //funcion para cambiar formulario con cada input de teclado
     setFormValue({
       ...formValue,
       [event.target.name]: event.target.value,
     });
   };
   async function handleSub(e) {
+    //funcion para enviar formulario de inicio
     e.preventDefault();
     try {
       await handleSubmit(formValue);
@@ -24,6 +28,7 @@ export default function Login({ handleSubmit, changeRemember }) {
     }
   }
   const handlerem = (e) => {
+    //cambiar estado del checkbox
     changeRemember(e.target.checked);
   };
   return (

@@ -4,7 +4,7 @@ const PrivateRoute = (props) => {
   const data = localStorage.getItem("user");
   const { children } = props;
   if (data) {
-    console.log(children);
+    //si no existe un usuario no es posible acceder a esta ruta
     return children;
   } else {
     console.log("2");

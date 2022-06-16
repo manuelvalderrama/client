@@ -73,6 +73,7 @@ export default function App() {
     }
   };
   return (
+    //retorno de rutas con contenedor de toastify y contexto
     <BrowserRouter>
       <Contextapp>
         <ToastContainer />

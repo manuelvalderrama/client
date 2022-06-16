@@ -11,6 +11,7 @@ const Excelfile = ExportExcel.ExcelFile;
 const Excelsheet = ExportExcel.ExcelFile;
 const Excelcolumn = ExportExcel.ExcelFile;
 export default function Plantillas() {
+  //declaraciones de variables varias con hooks
   const [products, setProducts] = useState();
   const [Country, setCountry] = useState();
   const [Tipo, setTipo] = useState();
@@ -144,15 +145,18 @@ export default function Plantillas() {
     },
   ]);
   const [page, setpage] = useState(0);
+  //funcion extractora del contexto actual
   const { LifemilesRequest /*, getCombobox*/ } = useAppContext();
 
   const [formValue, setFormValue] = useState([
+    //variable designada para la subida de SKU, ignorar variables ya preestablecidas
     "LE024EL64AMXLACOL",
     "LE024EL63AMYLACOL",
     "LE024EL62AMZLACOL",
   ]);
 
   async function handleSub(e) {
+    //Funcion que llama a otra funcion del contexto para hacer consulta de sku
     e.preventDefault();
     var aux = {
       pais: Country,
@@ -192,6 +196,7 @@ export default function Plantillas() {
     }
   }
   const handlechange = (e) => {
+    // funcion para manejar el cambio del input de SKU
     e.preventDefault();
     var aux = e.target.value;
     setForm(aux);
@@ -401,7 +406,7 @@ export default function Plantillas() {
                 <thead className="bg-gray-50">
                   <tr>
                     {!(products.length === 0) ? (
-                      Object.keys(products[0][0]).map((obj) => (
+                      Object.keys(products[page][0]).map((obj) => (
                         <th
                           scope="col"
                           className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider"

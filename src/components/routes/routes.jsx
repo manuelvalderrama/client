@@ -11,10 +11,10 @@ import PrivateRoute from "../privateRoute";
 import PublicRoute from "../publicRoute";
 
 export default function MyRoutes({ Plantilla }) {
-  const { handleSubmit, changeRemember, logout, Progres } = useAppContext();
+  const { handleSubmit, changeRemember, logout, Progres } = useAppContext(); //variables y funciones extraidas de contexto
   return (
     <>
-      {Progres > 0 && (
+      {Progres > 0 && ( //seccion de condigo dedicada a la barra de navegacion
         <div className="relative top-0  bg-transparent z-30 h-1">
           <div
             className="bg-white h-1"

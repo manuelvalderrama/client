@@ -11,6 +11,7 @@ import jwt_decode from "jwt-decode";
 const AppContext = createContext();
 
 export function Contextapp({ children }) {
+  //declaracion de variables en el contexto
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const [Remember, setRemember] = useState(false);
@@ -19,45 +20,36 @@ export function Contextapp({ children }) {
   const changeRemember = (e) => {
     setRemember(e);
   };
+
   useEffect(() => {
+    // hook de use effect en primera renderizacion
     const data = localStorage.getItem("user");
     if (data) {
       setUser(JSON.parse(data));
     }
   }, []);
   useEffect(() => {
+    // use effect con progress
     console.log(Progres);
   }, [Progres]);
 
   useEffect(() => {
+    // use effect
     if (Remember) {
       localStorage.setItem("user", JSON.stringify(user));
     }
   });
 
   const logout = () => {
+    //Funcion usada para cerra sesion
     localStorage.clear();
     setUser(null);
     navigate("/login");
   };
-  /*
-  const refreshToken = async () => {
-    try {
-      const res = await axios.post("/refresh", { token: user.refreshToken });
-      setUser({
-        ...user,
-        accessToken: res.data.accessToken,
-        refreshToken: res.data.refreshToken,
-      });
-      return res.data;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  */
   const axiosJWT = axios.create();
 
   axiosJWT.interceptors.request.use(
+    //inicializacion de axios para uso de JWT
     async (config) => {
       let currentDate = new Date();
       const decodedToken = jwt_decode(user.accessToken);
@@ -72,6 +64,7 @@ export function Contextapp({ children }) {
   );
 
   const handleSubmit = async (e) => {
+    // Consulta para iniciar sesion
     try {
       if (typeof e.username === "string") {
         const res = await axios.post("http://localhost:5000/api/login", {
@@ -86,17 +79,20 @@ export function Contextapp({ children }) {
   };
 
   const LifemilesRequest = async (e) => {
+    //consulta para plantillas de SKU
     try {
       if (typeof e.pais === "string") {
         var y = [];
         var x = e.sku;
         const chunkSize = 100;
         for (let i = 0; i < x.length; i += chunkSize) {
+          //separacion de SKU por lotes, logica
           const chunk = x.slice(i, i + chunkSize);
           y.push(chunk);
         }
         let res = [];
         for (let i = 0; i < y.length; i++) {
+          //consulta de axios por lotes
           setProgres((i * 100) / y.length);
           await axios
             .post("http://172.19.0.60:5000/api/plantilla", {
@@ -105,7 +101,7 @@ export function Contextapp({ children }) {
               tipo: e.tipo,
             })
             .then((response) => {
-              res.push(response.data);
+              res.push(response.data); //envio de consulta de respuesta
             });
         }
         setProgres(0);
@@ -120,6 +116,7 @@ export function Contextapp({ children }) {
     setSlide(!Slide);
   };
   const value = useMemo(() => {
+    // variables exportadas y usadas por otros componentes
     return {
       logout,
       LifemilesRequest,
@@ -130,7 +127,7 @@ export function Contextapp({ children }) {
       handleSubmit,
       Progres,
     };
-  }, [Slide, Progres]);
+  }, [Slide, Progres]); //Las variables proporcionadas por el contexto solo cambian cuando estas variables cambian
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
